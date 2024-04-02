@@ -1,3 +1,8 @@
+export:
+  compress: false
+  file:
+    - csv
+    - sql
 src:
   type: mysql
   host: 127.0.0.1
