@@ -1,0 +1,18 @@
+src:
+  type: mysql
+  host: 127.0.0.1
+  port: 3307
+  user: root
+  password: 123456
+  db: ry-vue
+  tables:
+    - sys_config
+    - sys_dept
+    - sys_dict_data
+dest:
+  type: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: 123456
+  db: ry-vue
