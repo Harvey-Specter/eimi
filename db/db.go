@@ -80,11 +80,6 @@ func SelectAndInsert(dbsrc *sqlx.DB, dbdest *sqlx.DB, tables []Table) (int, erro
 			batchInsertSQL := genInsertSql(tableName, dataList)
 			fmt.Println("batchInsertSQL===", batchInsertSQL)
 		}
-		// insertStr := "%s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Local"
-		//insertStr := "insert %s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Local"
-		//buf.WriteString(fmt.Sprintf(mysqlStr, user, password, host, port, dbname))
-		//db = sqlx.MustConnect("mysql", buf.String())
-
 	}
 	return cnt, nil
 }
@@ -113,7 +108,6 @@ func genInsertSql(tableName string, dataList []map[string]interface{}) string {
 			insertStrSlice = append(insertStrSlice, strings.Join(colSlice, ","), ")", "values")
 		}
 		valuesStrSlice = append(valuesStrSlice, strings.Join([]string{"(", strings.Join(valueSlice, ","), ")"}, ""))
-
 	}
 	insertStrSlice = append(insertStrSlice, strings.Join(valuesStrSlice, ","))
 	insertStr := strings.Join(insertStrSlice, " ")
@@ -127,35 +121,25 @@ type Table struct {
 }
 
 func interface2String(i interface{}) string {
-	fmt.Println("i=======", i)
-	fmt.Printf("Type of i is %T\n", i)
+	// fmt.Println("i=======", i)
+	// fmt.Printf("Type of i is %T\n", i)
 	if i == nil {
 		return "null"
 	}
-	switch i.(type) {
+	switch i := i.(type) {
 	case string:
-		return i.(string)
-		//fmt.Println("string", i.(string))
-		//break
+		return i
 	case int64:
-		return strconv.FormatInt(i.(int64), 10)
+		return strconv.FormatInt(i, 10)
 	case int:
-		return strconv.Itoa(i.(int))
-		// fmt.Println("int", i.(int))
-		// break
+		return strconv.Itoa(i)
 	case float64:
 		str := fmt.Sprintf("%f", i)
 		return str
-		// fmt.Println("float64", i.(float64))
-		// break
 	case []uint8:
-		return string(i.([]uint8))
+		return string(i)
 	case time.Time:
-		if t, ok := i.(time.Time); ok {
-			return t.Format("2006-01-02 15:04:05")
-		}
-		return "badTime"
-
+		return i.Format("2006-01-02 15:04:05")
 	default:
 		return i.(string)
 	}
