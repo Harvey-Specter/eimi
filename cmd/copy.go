@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Harvey-Specter/eimi/svc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -42,6 +43,9 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("copy called")
 		fmt.Printf("Config: %v\n", viper.AllSettings())
+		allMap := viper.AllSettings()
+		svc.GetRecord(allMap["src"].(map[string]any))
+
 	},
 }
 
