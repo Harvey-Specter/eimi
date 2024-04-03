@@ -44,7 +44,8 @@ to quickly create a Cobra application.`,
 		fmt.Println("copy called")
 		fmt.Printf("Config: %v\n", viper.AllSettings())
 		allMap := viper.AllSettings()
-		svc.GetRecord(allMap["src"].(map[string]any))
+		// svc.GetRecord(allMap["src"].(map[string]any))
+		svc.GetDDL(allMap["src"].(map[string]any))
 
 	},
 }

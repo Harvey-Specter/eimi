@@ -44,12 +44,28 @@ func GetByID(db *sqlx.DB) (map[string]interface{}, error) {
 
 	var rs = make(map[string]interface{})
 	// err := db.QueryRowx("SELECT * FROM user WHERE id = ?", id).StructScan(rs)
-	rows, err := db.Queryx("select * from sys_dept")
+
+	// sql := "select * from sys_dept"
+	showCreateTable := "show create table sys_dept"
+	rows, err := db.Queryx(showCreateTable)
 
 	for rows.Next() {
 		err = rows.MapScan(rs)
-		fmt.Println("GetByID", rs)
+		//fmt.Println("GetByID", rs)
 	}
 
 	return rs, err
 }
+
+type Table struct {
+	Table string `json:"table" db:"Table"`
+	DDL   string `json:"ddl" db:"Create Table"`
+}
+
+func GetTable(db *sqlx.DB) (table Table, err error) {
+	err = db.Get(&table, sqlGetTable)
+	// err will be nil on success
+	return table, err
+}
+
+const sqlGetTable = `SHOW CREATE TABLE sys_dept`
