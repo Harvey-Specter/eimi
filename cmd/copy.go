@@ -45,8 +45,13 @@ to quickly create a Cobra application.`,
 		fmt.Printf("Config: %v\n", viper.AllSettings())
 		allMap := viper.AllSettings()
 		// svc.GetRecord(allMap["src"].(map[string]any))
-		svc.GetDDL(allMap["src"].(map[string]any))
-
+		srcMap := allMap["src"].(map[string]any)
+		destMap := allMap["dest"].(map[string]any)
+		tables := svc.GetDDL(srcMap)
+		_, err := svc.ExecCopy(srcMap, destMap, tables)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 	},
 }
 

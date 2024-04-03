@@ -11,7 +11,7 @@ src:
   password: "123456"
   db: ry-vue
   tables:
-    - sys_config
+    - sys_menu
     - sys_dept
     - sys_dict_data
 dest:
@@ -20,4 +20,4 @@ dest:
   port: 3306
   user: root
   password: "123456"
-  db: test
+  db: wp
