@@ -38,5 +38,7 @@ func ExecCopy(srcMap map[string]any, destMap map[string]any, tables []db.Table) 
 		fmt.Println("ExecCopy===", err.Error())
 		return 0, err
 	}
+	defer srcdb.Close()
+	defer destdb.Close()
 	return affectTableCnt, nil
 }

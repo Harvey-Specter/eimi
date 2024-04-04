@@ -31,6 +31,7 @@ import (
 )
 
 // copyCmd represents the copy command
+// var Append string
 var copyCmd = &cobra.Command{
 	Use:   "copy",
 	Short: "A brief description of your command",
@@ -43,6 +44,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("copy called")
 		fmt.Printf("Config: %v\n", viper.AllSettings())
+		// fmt.Printf("Source: %v\n", Append)
 		allMap := viper.AllSettings()
 		// svc.GetRecord(allMap["src"].(map[string]any))
 		srcMap := allMap["src"].(map[string]any)
@@ -63,6 +65,7 @@ func init() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	//copyCmd.Flags().StringVarP(&Append, "append", "a", "", "append data on exists table")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

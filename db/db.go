@@ -37,13 +37,15 @@ func GetConn(connMap map[string]any) *sqlx.DB {
 	// if dbType == "oracle" {
 
 	// }
-
 	return db
 }
 
+func doDDLByType() {
+
+}
 func GetByID(db *sqlx.DB) (map[string]interface{}, error) {
 	var rs = make(map[string]interface{})
-	sql := "select * from sys_dept"
+	sql := "select * from sys_dept123"
 	rows, err := db.Queryx(sql)
 	for rows.Next() {
 		err = rows.MapScan(rs)
@@ -78,7 +80,9 @@ func SelectAndInsert(dbsrc *sqlx.DB, dbdest *sqlx.DB, tables []Table) (int, erro
 		}
 		if len(dataList) > 0 {
 			batchInsertSQL := genInsertSql(tableName, dataList)
-			fmt.Println("batchInsertSQL===", batchInsertSQL)
+			// fmt.Println("batchInsertSQL===", batchInsertSQL)
+			dbdest.MustExec(batchInsertSQL)
+			cnt += 1
 		}
 	}
 	return cnt, nil
@@ -87,25 +91,29 @@ func genInsertSql(tableName string, dataList []map[string]interface{}) string {
 	fmt.Println("tableName=======", tableName)
 	insertStrSlice := []string{"insert into", tableName, "("}
 	valuesStrSlice := []string{}
+	colSlice := []string{}
 	for i, dataMap := range dataList {
-		fmt.Println("dataMap=====", dataMap)
-		colSlice := []string{}
+		// fmt.Println("dataMap=====", dataMap)
+		//		colSlice = []string{}
 		// insert into tName (a,b,c,d) values ('11','3','12345',"@@@")
 		valueSlice := []string{}
-		for k, v := range dataMap {
+		for k, _ := range dataMap {
 			if i == 0 {
 				colSlice = append(colSlice, k)
-			}
-			fmt.Println("k=====", k)
-			insertValue := interface2String(v)
-			if insertValue == "null" {
-				valueSlice = append(valueSlice, interface2String(v))
 			} else {
-				valueSlice = append(valueSlice, strings.Join([]string{"'", interface2String(v), "'"}, ""))
+				break
 			}
 		}
 		if i == 0 {
 			insertStrSlice = append(insertStrSlice, strings.Join(colSlice, ","), ")", "values")
+		}
+		for _, col := range colSlice {
+			insertValue := interface2String(dataMap[col])
+			if insertValue == "null" {
+				valueSlice = append(valueSlice, insertValue)
+			} else {
+				valueSlice = append(valueSlice, strings.Join([]string{"'", insertValue, "'"}, ""))
+			}
 		}
 		valuesStrSlice = append(valuesStrSlice, strings.Join([]string{"(", strings.Join(valueSlice, ","), ")"}, ""))
 	}
